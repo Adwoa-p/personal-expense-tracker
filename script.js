@@ -2,7 +2,7 @@
 const expense = {
     id: generateRandomId(),
     description: "",
-    amount: "", // will be stored in pesewas but displayed in cedis
+    amount: 0, // will be stored in pesewas but displayed in cedis
     date: new Date(),
     category: ""
 };
@@ -24,13 +24,20 @@ function generateRandomId(){
 
 // cedi to pesewa, and vice versa convertion
 function convertMoney(amount, type){
-    if (type==="CEDIS"){
-        const pesewasAmt = amount*100;
+    amount = Number(amount);
+    if (isNaN(amount)){
+        return "Invalid currency"
+    } else{
+        if (type==="CEDIS"){
+            const pesewasAmt = amount*100;
         return pesewasAmt;
-    }else if(type==="PESEWAS"){
-        const cediAmt = amount/100;
-        return cediAmt;
-    }else{
-        return "Invalid currency type"
+        }else if(type==="PESEWAS"){
+            const cediAmt = amount/100;
+            return cediAmt;
+        }else{
+            return "Invalid currency type"
+        }
     }
 }
+
+console.log(convertMoney("Hi", "CEDIS"));
