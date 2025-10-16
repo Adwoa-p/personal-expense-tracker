@@ -7,6 +7,23 @@ const expense = {
     category: ""
 };
 
+const expenseFilter = {
+    category : {
+        eq:"",
+        notEq:"",
+    },
+    amount: {
+        eq:0,
+        lt:0,
+        lte:0,
+        gt:0,
+        gte:0
+    }
+}
+
+// save the expenses in the local storage with this key
+const STORAGE_KEY = "expenses"
+
 const category = ["Rent", "Transportation","Church", "Groceries ", "Savings","Internet"];
 
 // random id for each expense created
@@ -40,110 +57,73 @@ function convertMoney(amount, type){
     }
 }
 
-
+const allExpenses = [];
 // accept and store expense in local storage
 function addExpense(expense){
-    localStorage.setItem(expense.id, JSON.stringify(expense));
+    const oldExpenses = getExpenses();
+    oldExpenses.push(expense);
+    const newExpenses = oldExpenses;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(newExpenses))
     return "Expense added successfully";
 }
 
 // retrieve expense by id
 function getExpense(id){
-    let expense = localStorage.getItem(id);
-    expense = JSON.parse(expense);
-    return expense;
-}
-
-// filter expenses by category and amount varieties
-
-function getAllExpensesCategoryEq(filter) {
-    const expenses = [];
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        let value = localStorage.getItem(key);
-        const expense = JSON.parse(value);
-        if (!filter || expense.category === filter) {
-            expenses.push(expense);
-         }
+    let expenses = localStorage.getItem(STORAGE_KEY);
+    expenses = JSON.parse(expenses);
+    const foundExpense = expenses.find(expense => expense.id === id)
+    if (Boolean(foundExpense)){
+        return foundExpense ;
+    } else{
+        return"Expense doesn't exist";
     }
-    return expenses;
 }
 
-function getAllExpensesCategoryNotEq(filter) {
-    const expenses = [];
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        let value = localStorage.getItem(key);
-        const expense = JSON.parse(value);
-        if (!filter || expense.category !== filter) {
-            expenses.push(expense);
-         }
+// filter expenses by category and amount 
+function getExpenses(filter){
+    let expenses = localStorage.getItem(STORAGE_KEY);
+        expenses = JSON.parse(expenses);
+
+    // return all expenses if no filter is provided
+    if (!Boolean(filter)){
+        return expenses;
+    } else{
+        let filteredExpenses = expenses.filter(expense => {
+            // filters for category
+            if (filter.category) {
+                const eq = filter.category.eq; 
+                const notEq = filter.category.notEq;
+                if ( eq && expense.category === eq) {
+                    return eq && expense.category === eq;
+                }
+                if (notEq && expense.category !== notEq) {
+                    return notEq && expense.category !== notEq;
+                }
+            }
+            // filters for amount
+            if (filter.amount) {
+                const amtEq = filter.amount.eq;
+                const lt = filter.amount.lt;
+                const lte = filter.amount.lte;
+                const gt = filter.amount.gt;
+                const gte= filter.amount.gte;
+                if (amtEq && expense.amount === amtEq) {
+                    return amtEq && expense.amount === amtEq;
+                }
+                if (lt && expense.amount < lt) {
+                    return lt && expense.amount < lt;
+                }
+                if (lte && expense.amount <= lte) {
+                    return lte  && expense.amount <= lte;
+                } 
+                if (gt && expense.amount > gt) {
+                    return gt && expense.amount > gt;
+                }
+                if (gte && expense.amount >= gte) {
+                    return gte && expense.amount >= gte;
+                }
+            }
+        });
+        return filteredExpenses;
     }
-    return expenses;
 }
-
-function getAllExpensesCategoryAmtEq(filter) {
-    const expenses = [];
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        let value = localStorage.getItem(key);
-        const expense = JSON.parse(value);
-        if (!filter || expense.amount !== filter) {
-            expenses.push(expense);
-         }
-    }
-    return expenses;
-}
-
-function getAllExpensesCategoryAmtLt(filter = "") {
-    const expenses = [];
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        let value = localStorage.getItem(key);
-        const expense = JSON.parse(value);
-        if (!filter || expense.amount < filter) {
-            expenses.push(expense);
-         }
-    }
-    return expenses;
-}
-
-function getAllExpensesCategoryAmtLte(filter = "") {
-    const expenses = [];
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        let value = localStorage.getItem(key);
-        const expense = JSON.parse(value);
-        if (!filter || expense.category <= filter) {
-            expenses.push(expense);
-         }
-    }
-    return expenses;
-}
-
-function getAllExpensesCategoryAmtGt(filter = "") {
-    const expenses = [];
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        let value = localStorage.getItem(key);
-        const expense = JSON.parse(value);
-        if (!filter || expense.amount > filter) {
-            expenses.push(expense);
-         }
-    }
-    return expenses;
-}
-
-function getAllExpensesCategoryAmtGte(filter = "") {
-    const expenses = [];
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        let value = localStorage.getItem(key);
-        const expense = JSON.parse(value);
-        if (!filter || expense.amount >= filter) {
-            expenses.push(expense);
-         }
-    }
-    return expenses;
-}
-
