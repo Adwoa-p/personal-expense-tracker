@@ -130,20 +130,14 @@ function getExpenses(filter){
 
 function getTotalExpenses(){
     const expenses = getExpenses();
-    let sum = 0;
-    expenses.forEach(expense => {
-        sum+=expense.amount;
-    });
+    let sum = expenses.reduce( (acc,expense) => acc + expense.amount, 0);
     sum = convertMoney(sum, "PESEWAS");
     return sum;
 }
 
 function getTotalExpensesByCategory(category){
     const expenses = getExpenses(category);
-    let sum = 0;
-    expenses.forEach(expense => {
-        sum+=expense.amount;
-    });
+    let sum = expenses.reduce( (acc,expense) => acc + expense.amount, 0);
     sum = convertMoney(sum, "PESEWAS");
     return sum;
 }
