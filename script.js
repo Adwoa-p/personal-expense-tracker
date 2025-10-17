@@ -94,10 +94,10 @@ function getExpenses(filter){
                 const eq = filter.category.eq; 
                 const notEq = filter.category.notEq;
                 if ( eq && expense.category === eq) {
-                    return eq && expense.category === eq;
+                    return expense.category === eq;
                 }
                 if (notEq && expense.category !== notEq) {
-                    return notEq && expense.category !== notEq;
+                    return expense.category !== notEq;
                 }
             }
             // filters for amount
@@ -108,19 +108,19 @@ function getExpenses(filter){
                 const gt = filter.amount.gt;
                 const gte= filter.amount.gte;
                 if (amtEq && expense.amount === amtEq) {
-                    return amtEq && expense.amount === amtEq;
+                    return expense.amount === amtEq;
                 }
                 if (lt && expense.amount < lt) {
-                    return lt && expense.amount < lt;
+                    return expense.amount < lt;
                 }
                 if (lte && expense.amount <= lte) {
-                    return lte  && expense.amount <= lte;
+                    return expense.amount <= lte;
                 } 
                 if (gt && expense.amount > gt) {
-                    return gt && expense.amount > gt;
+                    return expense.amount > gt;
                 }
                 if (gte && expense.amount >= gte) {
-                    return gte && expense.amount >= gte;
+                    return expense.amount >= gte;
                 }
             }
         });
