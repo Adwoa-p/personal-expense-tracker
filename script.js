@@ -164,3 +164,27 @@ function getExpenseSummary(){
             By category:  
             ${totalExpensesByCategory}`
 }
+
+function  updateExpense(id, updatedFields){ // updatedFields obj containing fields for new values, al attrs or not
+    const oldExpense = getExpense(id); // returns the object
+    const expenses = getExpenses();
+    const index = expenses.findIndex(expense => expense.id === id);
+    // clone and merge expenses
+    const newExpense = {
+        ...oldExpense,
+        ...updatedFields
+    }
+    expenses[index] = newExpense;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(expenses));
+    return `Expense updated successfully`;
+}
+
+const expense1 = {
+    amount: 3000, // will be stored in pesewas but displayed in cedis
+    category: "Food"
+};
+
+let updatedExpense = updateExpense("A1B2C2D4", expense1);
+console.log(updatedExpense);
+console.log(getExpenses());
+console.log(getExpense("A1B2C2D4"));
