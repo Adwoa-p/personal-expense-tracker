@@ -24,7 +24,7 @@ const expenseFilter = {
 // save the expenses in the local storage with this key
 const STORAGE_KEY = "expenses"
 
-const category = ["Rent", "Transportation","Church", "Groceries ", "Savings","Internet"];
+const category = ["Utilities", "Transportation","Church", "Food", "Savings"];
 
 // random id for each expense created
 function generateRandomId(){
@@ -94,10 +94,10 @@ function getExpenses(filter){
                 const eq = filter.category.eq; 
                 const notEq = filter.category.notEq;
                 if ( eq && expense.category === eq) {
-                    return eq && expense.category === eq;
+                    return expense.category === eq;
                 }
                 if (notEq && expense.category !== notEq) {
-                    return notEq && expense.category !== notEq;
+                    return expense.category !== notEq;
                 }
             }
             // filters for amount
@@ -108,22 +108,83 @@ function getExpenses(filter){
                 const gt = filter.amount.gt;
                 const gte= filter.amount.gte;
                 if (amtEq && expense.amount === amtEq) {
-                    return amtEq && expense.amount === amtEq;
+                    return expense.amount === amtEq;
                 }
                 if (lt && expense.amount < lt) {
-                    return lt && expense.amount < lt;
+                    return expense.amount < lt;
                 }
                 if (lte && expense.amount <= lte) {
-                    return lte  && expense.amount <= lte;
+                    return expense.amount <= lte;
                 } 
                 if (gt && expense.amount > gt) {
-                    return gt && expense.amount > gt;
+                    return expense.amount > gt;
                 }
                 if (gte && expense.amount >= gte) {
-                    return gte && expense.amount >= gte;
+                    return expense.amount >= gte;
                 }
             }
         });
         return filteredExpenses;
     }
 }
+
+function getTotalExpenses(){
+    const expenses = getExpenses();
+    let sum = expenses.reduce( (acc,expense) => acc + expense.amount, 0);
+    sum = convertMoney(sum, "PESEWAS");
+    return sum;
+}
+
+function getTotalExpensesByCategory(category){
+    const expenses = getExpenses(category);
+    let sum = expenses.reduce( (acc,expense) => acc + expense.amount, 0);
+    sum = convertMoney(sum, "PESEWAS");
+    return sum;
+}
+
+function getAverageExpense(){
+    const totalExpenses = getTotalExpenses();
+    const expenseLength = getExpenses().length;
+    if (expenseLength === 0) {
+        return "Can't divide by zero";
+    }
+    let averageExpense = totalExpenses/expenseLength;
+    return averageExpense;
+}
+
+function getExpenseSummary(){
+    const totalExpenses = getTotalExpenses();
+    const averageExpense = getAverageExpense();
+    const totalExpensesByCategory = category.map(
+        (cat) =>  `- ${cat}: ${getTotalExpensesByCategory({category:{eq:cat}})}`
+        
+    );
+    return `Total spent: ${totalExpenses}  
+            Average expense: ${averageExpense}  
+            By category:  
+            ${totalExpensesByCategory}`
+}
+
+function  updateExpense(id, updatedFields){ // updatedFields obj containing fields for new values, al attrs or not
+    const oldExpense = getExpense(id); // returns the object
+    const expenses = getExpenses();
+    const index = expenses.findIndex(expense => expense.id === id);
+    // clone and merge expenses
+    const newExpense = {
+        ...oldExpense,
+        ...updatedFields
+    }
+    expenses[index] = newExpense;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(expenses));
+    return `Expense updated successfully`;
+}
+
+const expense1 = {
+    amount: 3000, // will be stored in pesewas but displayed in cedis
+    category: "Food"
+};
+
+let updatedExpense = updateExpense("A1B2C2D4", expense1);
+console.log(updatedExpense);
+console.log(getExpenses());
+console.log(getExpense("A1B2C2D4"));
