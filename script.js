@@ -24,7 +24,7 @@ const expenseFilter = {
 // save the expenses in the local storage with this key
 const STORAGE_KEY = "expenses"
 
-const category = ["Rent", "Transportation","Church", "Groceries ", "Savings","Internet"];
+const category = ["Utilities", "Transportation","Church", "Food", "Savings"];
 
 // random id for each expense created
 function generateRandomId(){
@@ -126,4 +126,47 @@ function getExpenses(filter){
         });
         return filteredExpenses;
     }
+}
+
+function getTotalExpenses(){
+    const expenses = getExpenses();
+    let sum = 0;
+    expenses.forEach(expense => {
+        sum+=expense.amount;
+    });
+    sum = convertMoney(sum, "PESEWAS");
+    return sum;
+}
+
+function getTotalExpensesByCategory(category){
+    const expenses = getExpenses(category);
+    let sum = 0;
+    expenses.forEach(expense => {
+        sum+=expense.amount;
+    });
+    sum = convertMoney(sum, "PESEWAS");
+    return sum;
+}
+
+function getAverageExpense(){
+    const totalExpenses = getTotalExpenses();
+    const expenseLength = getExpenses().length;
+    if (expenseLength === 0) {
+        return "Can't divide by zero";
+    }
+    let averageExpense = totalExpenses/expenseLength;
+    return averageExpense;
+}
+
+function getExpenseSummary(){
+    const totalExpenses = getTotalExpenses();
+    const averageExpense = getAverageExpense();
+    const totalExpensesByCategory = category.map(
+        (cat) =>  `- ${cat}: ${getTotalExpensesByCategory({category:{eq:cat}})}`
+        
+    );
+    return `Total spent: ${totalExpenses}  
+            Average expense: ${averageExpense}  
+            By category:  
+            ${totalExpensesByCategory}`
 }
