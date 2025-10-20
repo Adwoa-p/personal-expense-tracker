@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link rel="icon" href="images/favicon.png" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,7 +12,63 @@
     <title>Trakr</title>
 </head>
 <body>
-    Hi
+    <header>
+        <div class="w-full h-17 bg-[#7FB3AD] text-2xl text-white flex items-center font-bold px-15"> Trakr </div>
+        <div class="w-full h-13 bg-[#FBF9FA] shadow-sm flex items-end px-15"> 
+            <ul class=" flex flex-row gap-16">
+                <li class="hover:underline decoration-amber-300 underline-offset-[5px] decoration-2"> <a href="#dashboard"> Dashboard </a></li>
+                <li class="hover:underline decoration-amber-300 underline-offset-[5px] decoration-2"><a href="#expenses"> Expenses </a></li>
+                <li class="hover:underline decoration-amber-300 underline-offset-[5px] decoration-2"><a href="#analytics"> Analytics </a></li>
+            </ul>
+        </div>
+    </header>
+    <main class="m-10">
+        <div id="dashboard" class=""> 
+            <p class="font-bold text-2xl ml-5">Summary</p>
+            <div class="grid grid-cols-3 mt-10 place-items-center gap-10 ">
+                <div class="w-110 h-40 bg-[#FBF9FA] shadow-sm rounded-4xl flex flex-col p-8 gap-10"> Total Expenses <span> {Amount} </span></div>
+                <div class="w-110 h-40 bg-[#FBF9FA] shadow-sm rounded-4xl flex flex-col p-8 gap-10"> Total Expenses  <span> {Amount} </span> </div>
+                <div class="w-110 h-40 bg-[#FBF9FA] shadow-sm rounded-4xl  flex flex-col p-8 gap-10"> Total Expenses  <span> {Amount} </span></div>
+            </div>
+            <p class="mt-10 font-bold text-2xl ml-5">Expenses By Category</p>
+            <div class="grid grid-cols-3 mt-10 gap-10 place-items-center">
+                <div class="w-110 h-40 bg-[#FBF9FA] shadow-sm rounded-4xl flex flex-col p-8 gap-10 font-bold"> Total Expenses <span class="text-2xl"> {Amount} </span></div>
+                <div class="w-110 h-40 bg-[#FBF9FA] shadow-sm rounded-4xl flex flex-col p-8 gap-10"> Total Expenses  <span> {Amount} </span> </div>
+                <div class="w-110 h-40 bg-[#FBF9FA] shadow-s                // ...existing code...
+                
+                function showSection(sectionId) {
+                    // Hide all sections
+                    document.querySelectorAll('.section').forEach(section => {
+                        section.classList.add('hidden');
+                    });
+                    // Show requested section
+                    const section = document.getElementById(sectionId);
+                    if (section) section.classList.remove('hidden');
+                }
+                
+                // Handle navigation
+                window.addEventListener('hashchange', () => {
+                    const hash = window.location.hash.slice(1) || 'dashboard';
+                    showSection(hash);
+                    if (hash === 'dashboard') renderDashboard();
+                    if (hash === 'expenses') renderExpensesPage();
+                    if (hash === 'analytics') renderAnalytics();
+                });
+                
+                // Initial load
+                window.dispatchEvent(new HashChangeEvent('hashchange'));m rounded-4xl  flex flex-col p-8 gap-10"> Total Expenses  <span> {Amount} </span></div>
+                <div class="w-110 h-40 bg-[#FBF9FA] shadow-sm rounded-4xl flex flex-col p-8 gap-10"> Total Expenses  <span> {Amount} </span> </div>
+                <div class="w-110 h-40 bg-[#FBF9FA] shadow-sm rounded-4xl  flex flex-col p-8 gap-10"> Total Expenses  <span> {Amount} </span></div>
+            </div>
+        </div>
+
+        <div id="expense"> </div>
+        <section>  </section>
+    </main>
+
+
+
+
     <script src="script.js"></script>
 </body>
 </html>
