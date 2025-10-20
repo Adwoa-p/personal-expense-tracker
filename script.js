@@ -1,3 +1,5 @@
+window.onload = localStorage.clear();
+
 //  expense model object
 const expense = {
     id: "",
@@ -60,18 +62,24 @@ function convertMoney(amount, type){
 const allExpenses = [];
 // accept and store expense in local storage
 function addExpense(expense){
-    const oldExpenses = getExpenses();
-    oldExpenses.push(expense);
-    const newExpenses = oldExpenses;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(newExpenses))
-    return "Expense added successfully";
+    const oldExpenses = getExpenses() || allExpenses;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(oldExpenses));
+    if (Number(expense.amount) && category.includes(expense.category)){
+        const expenseWithId = {id: generateRandomId(), ...expense}
+        oldExpenses.push(expenseWithId);
+        const newExpenses = oldExpenses;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(newExpenses))
+        return "Expense added successfully";
+    }else{
+        return "Invalid expense input"
+    }
 }
 
 // retrieve expense by id
 function getExpense(id){
     let expenses = localStorage.getItem(STORAGE_KEY);
     expenses = JSON.parse(expenses);
-    const foundExpense = expenses.find(expense => expense.id === id)
+    const foundExpense = (expenses || []).find(expense => expense.id === id)
     if (Boolean(foundExpense)){
         return foundExpense ;
     } else{
@@ -88,7 +96,7 @@ function getExpenses(filter){
     if (!Boolean(filter)){
         return expenses;
     } else{
-        let filteredExpenses = expenses.filter(expense => {
+        let filteredExpenses = (expenses || []).filter(expense => {
             // filters for category
             if (filter.category) {
                 const eq = filter.category.eq; 
@@ -168,13 +176,17 @@ function getExpenseSummary(){
 function  updateExpense(id, updatedFields){ // updatedFields obj containing fields for new values, al attrs or not
     const oldExpense = getExpense(id); // returns the object
     const expenses = getExpenses();
-    const index = expenses.findIndex(expense => expense.id === id);
+    const index = (expenses || []).findIndex(expense => expense.id === id);
     // clone and merge expenses
-    const newExpense = {
-        ...oldExpense,
-        ...updatedFields
+    if (Number(updatedFields.amount) && category.includes(updatedFields.category)){
+        const newExpense = {
+            ...oldExpense,
+            ...updatedFields
+        }
+        expenses[index] = newExpense;
+    }else{
+        console.log("Invalid update fields")
     }
-    expenses[index] = newExpense;
     localStorage.setItem(STORAGE_KEY, JSON.stringify(expenses));
     return `Expense updated successfully`;
 }
@@ -184,7 +196,16 @@ const expense1 = {
     category: "Food"
 };
 
-let updatedExpense = updateExpense("A1B2C2D4", expense1);
-console.log(updatedExpense);
+const expense2 = {
+    description: "Something",
+    amount: "5400", 
+    date: new Date(),
+    category: category[2]
+}
+
+// let updatedExpense = updateExpense("A1B2C2D4", expense1);
+// console.log(updatedExpense);
+// console.log(addExpense(expense2));
+console.log(addExpense(expense2));
 console.log(getExpenses());
-console.log(getExpense("A1B2C2D4"));
+// console.log(getExpense("A1B2C2D4"));
