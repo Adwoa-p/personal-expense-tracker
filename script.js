@@ -136,12 +136,12 @@ function  updateExpense(id, updatedFields){ // updatedFields obj containing fiel
         const summaryCard = document.createElement("div");
             summaryCard.innerHTML = `
             <p class="font-bold text-2xl ml-5">Summary</p>
-            <div class="grid grid-cols-3 mt-10 place-items-center gap-10 "> 
-                <div class="w-110 h-40 bg-[#FBF9FA] shadow-sm rounded-4xl flex flex-col p-8 gap-10 font-bold"> TOTAL EXPENSES <span class="text-2xl"> ${getTotalExpenses()} </span></div>
+            <div class="grid md:grid-cols-3 grid-cols-1 mt-10 place-items-center gap-10 "> 
+                <div class=" w-110 h-40 bg-[#FBF9FA] shadow-sm rounded-4xl flex flex-col p-8 gap-10 font-bold"> TOTAL EXPENSES <span class="text-2xl"> ${getTotalExpenses()} </span></div>
                 <div class="w-110 h-40 bg-[#FBF9FA] shadow-sm rounded-4xl flex flex-col p-8 gap-10 font-bold"> AVERAGE EXPENSES  <span class="text-2xl"> ${getAverageExpense()} </span> </div> 
             </div>
                 <p class="mt-10 font-bold text-2xl ml-5">Expenses By Category</p>
-            <div class="grid grid-cols-3 mt-10 gap-10 place-items-center">
+            <div class="grid md:grid-cols-3 grid-cols-1 mt-10 gap-10 place-items-center">
                     <div class="w-110 h-40 bg-[#FBF9FA] shadow-sm rounded-4xl flex flex-col p-8 gap-10 font-bold">  ${category[0].toUpperCase()} <span class="text-2xl"> ${getTotalExpensesByCategory({category:{ eq: category[0]}})} </span></div>
                     <div class="w-110 h-40 bg-[#FBF9FA] shadow-sm rounded-4xl flex flex-col p-8 gap-10 font-bold"> ${category[1].toUpperCase()} <span class="text-2xl"> ${getTotalExpensesByCategory({category:{ eq: category[1]}})} </span> </div>
                     <div class="w-110 h-40 bg-[#FBF9FA] shadow-sm rounded-4xl  flex flex-col p-8 gap-10 font-bold"> ${category[2].toUpperCase()} <span class="text-2xl"> ${getTotalExpensesByCategory({category:{ eq: category[2]}})} </span></div>
@@ -244,10 +244,10 @@ function  updateExpense(id, updatedFields){ // updatedFields obj containing fiel
 function updateTable(expense){
         const tableData = document.createElement("tr");
         tableData.innerHTML = `
-        <td class="border border-gray-400 p-2">${expense.description}</td>
-        <td class="border border-gray-400 p-2">${convertMoney(expense.amount, "PESEWAS")}</td>
-        <td class="border border-gray-400 p-2">  <span class="w-full h-full bg-amber-300 rounded-3xl"> ${expense.category} </span> </td>
-        <td class="border border-gray-400 p-2">${expense.date}</td>
+        <td class="border border-gray-400 md:p-2 p-1">${expense.description}</td>
+        <td class="border border-gray-400 md:p-2 p-1">${convertMoney(expense.amount, "PESEWAS")}</td>
+        <td class="border border-gray-400 md:p-2 p-1">  <span class="w-full h-full bg-amber-300 rounded-3xl"> ${expense.category} </span> </td>
+        <td class="border border-gray-400 md:p-2 p-1">${expense.date}</td>
         `;
         tableRow.appendChild(tableData);
         return "Table updated";

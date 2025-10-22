@@ -23,16 +23,16 @@
         </div>
     </header>
     <div class="flex justify-center items-center mt-10">
-        <form id="expenseForm" class="bg-[#FEF3C7] w-250 h-80 flex justify-center items-center rounded-3xl"> 
+        <form id="expenseForm" class="bg-[#FEF3C7] md:w-250 md:h-80 w-100 h-70 flex justify-center items-center rounded-3xl"> 
         <input type="hidden" id="editIndex">
-        <div class="grid grid-cols-2 gap-x-70 gap-y-10 ">
-            <div id="desc-input" class="flex flex-col gap-y-3">
+        <div class="grid grid-cols-2 md:gap-x-70 gap-x-24 gap-y-10 ">
+            <div id="desc-input" class="flex flex-col gap-y-3 ml-3">
                 <label for="description" class="flex flex-col">Description</label>
-                <input type="text" name="description" id="descriptionTitle" class="border border-gray-300 rounded-2xl w-80 h-10 focus:outline-[#7FB3AD] " placeholder="    Say something...">
+                <input type="text" name="description" id="descriptionTitle" class="border border-gray-300 rounded-2xl md:w-80 md:h-10 w-35 focus:outline-[#7FB3AD] " placeholder="    Say something...">
             </div>
             <div id="cat-input" class="flex flex-col gap-y-3">
                 <label for="category">Category</label>
-                <select id="categories" name="category" class="border border-gray-300 rounded-2xl w-80 h-10 focus:outline-[#7FB3AD] ">
+                <select id="categories" name="category" class="border border-gray-300 rounded-2xl  md:w-80 md:h-10 w-35 focus:outline-[#7FB3AD] ">
                     <option value="none">None</option>
                     <option value="utilities">utilities</option>
                     <option value="groceries">groceries</option>
@@ -41,22 +41,22 @@
                     <option value="savings">savings</option>
                 </select>
             </div>
-            <div id="amt-input" class="flex flex-col gap-y-3">
+            <div id="amt-input" class="flex flex-col gap-y-3  ml-3">
                 <label for="amount">Amount</label>
-                <input type="number" name="amount" id="amount" class="border border-gray-300 rounded-2xl w-80 h-10 focus:outline-[#7FB3AD]"  placeholder="    Gp">
+                <input type="number" name="amount" id="amount" class="border border-gray-300 rounded-2xl  md:w-80 md:h-10 w-35 focus:outline-[#7FB3AD]"  placeholder="    Gp">
             </div>
             <div id="date-input" class="flex flex-col gap-y-3">
                 <label for="date">Date</label>
-                <input type="date" name="date" id="date" class="border border-gray-300 rounded-2xl w-80 h-10 focus:outline-[#7FB3AD] ">
+                <input type="date" name="date" id="date" class="border border-gray-300 rounded-2xl  md:w-80 md:h-10 w-35 focus:outline-[#7FB3AD] ">
             </div>
             <div>
-                <button type="submit" id="addExpenseBtn" class="bg-[#7FB3AD] w-40 h-12 rounded-3xl hover:cursor-pointer active:bg-[#72a19b]"> Add Expense </button>
+                <button type="submit" id="addExpenseBtn" class="bg-[#7FB3AD] md:w-40 md:h-12 ml-3 p-1 rounded-3xl hover:cursor-pointer active:bg-[#72a19b]"> Add Expense </button>
             </div>
         </div>
     </form>
     </div>
-    <div class="flex justify-center items-center mt-10">
-        <table class="border border-gray-400 w-250 h-15">
+    <div class="flex justify-center items-center mt-10 mb-10">
+        <table class="border border-gray-400 md:w-250 md:h-15">
             <thead class="border-2 border-gray-400 bg-[#7FB3AD]">
                 <tr class="">
                 <th class="border border-gray-400">Description</th>
