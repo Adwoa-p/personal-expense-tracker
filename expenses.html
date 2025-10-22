@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="icon" href="images/favicon.png" type="image/png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <title>Trakr</title>
+</head>
+<body>
+    <header class="">
+        <div class="w-full h-17 bg-[#7FB3AD] text-2xl text-white flex items-center font-bold px-15 sticky"> Trakr </div>
+        <div class="w-full h-13 bg-[#FBF9FA] shadow-sm flex items-end px-15"> 
+            <ul class=" flex flex-row gap-16">
+                <li class="hover:underline decoration-amber-300 underline-offset-[5px] decoration-2"> <a href="index.html"> Dashboard </a></li>
+                <li class="hover:underline decoration-amber-300 underline-offset-[5px] decoration-2"><a href="expenses.html"> Expenses </a></li>
+                <li class="hover:underline decoration-amber-300 underline-offset-[5px] decoration-2"><a href="analytics.html"> Analytics </a></li>
+            </ul>
+        </div>
+    </header>
+    <div class="flex justify-center items-center mt-10">
+        <form id="expenseForm" class="bg-[#FEF3C7] md:w-250 md:h-80 w-100 h-70 flex justify-center items-center rounded-3xl"> 
+        <input type="hidden" id="editIndex">
+        <div class="grid grid-cols-2 md:gap-x-70 gap-x-24 gap-y-10 ">
+            <div id="desc-input" class="flex flex-col gap-y-3 ml-3">
+                <label for="description" class="flex flex-col">Description</label>
+                <input type="text" name="description" id="descriptionTitle" class="border border-gray-300 rounded-2xl md:w-80 md:h-10 w-35 focus:outline-[#7FB3AD] " placeholder="    Say something...">
+            </div>
+            <div id="cat-input" class="flex flex-col gap-y-3">
+                <label for="category">Category</label>
+                <select id="categories" name="category" class="border border-gray-300 rounded-2xl  md:w-80 md:h-10 w-35 focus:outline-[#7FB3AD] ">
+                    <option value="none">None</option>
+                    <option value="utilities">utilities</option>
+                    <option value="groceries">groceries</option>
+                    <option value="transportation">transportation</option>
+                    <option value="church">church</option>
+                    <option value="savings">savings</option>
+                </select>
+            </div>
+            <div id="amt-input" class="flex flex-col gap-y-3  ml-3">
+                <label for="amount">Amount</label>
+                <input type="number" name="amount" id="amount" class="border border-gray-300 rounded-2xl  md:w-80 md:h-10 w-35 focus:outline-[#7FB3AD]"  placeholder="    Gp">
+            </div>
+            <div id="date-input" class="flex flex-col gap-y-3">
+                <label for="date">Date</label>
+                <input type="date" name="date" id="date" class="border border-gray-300 rounded-2xl  md:w-80 md:h-10 w-35 focus:outline-[#7FB3AD] ">
+            </div>
+            <div>
+                <button type="submit" id="addExpenseBtn" class="bg-[#7FB3AD] md:w-40 md:h-12 ml-3 p-1 rounded-3xl hover:cursor-pointer active:bg-[#72a19b]"> Add Expense </button>
+            </div>
+        </div>
+    </form>
+    </div>
+    <div class="flex justify-center items-center mt-10 mb-10">
+        <table class="border border-gray-400 md:w-250 md:h-15">
+            <thead class="border-2 border-gray-400 bg-[#7FB3AD]">
+                <tr class="">
+                <th class="border border-gray-400">Description</th>
+                <th class="border border-gray-400">Amount</th>
+                <th class="border border-gray-400">Category</th>
+                <th class="border border-gray-400">Date</th>
+            </tr>
+            </thead>
+           <tbody class="border-2 border-gray-400 bg-[#FBF9FA]" id="t-body">
+           </tbody>
+        </table>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

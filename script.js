@@ -1,47 +1,6 @@
-window.onload = localStorage.clear();
+// window.onload = localStorage.clear();
 
-//  expense model object
-const expense = {
-    id: "",
-    description: "",
-    amount: 0, // will be stored in pesewas but displayed in cedis
-    date: new Date(),
-    category: ""
-};
-
-const expenseFilter = {
-    category : {
-        eq:"",
-        notEq:"",
-    },
-    amount: {
-        eq:0,
-        lt:0,
-        lte:0,
-        gt:0,
-        gte:0
-    }
-}
-
-// save the expenses in the local storage with this key
-const STORAGE_KEY = "expenses"
-
-const category = ["Utilities", "Transportation","Church", "Food", "Savings"];
-
-// random id for each expense created
-function generateRandomId(){
-    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    let id = "";
-    const length = characters.length;
-    for(let i=0; i<8; i++){
-        let key = Math.floor(Math.random() * length);
-        let character = characters.charAt(key);
-        id+=character;
-    }
-    return id;
-};
-
-// cedi to pesewa, and vice versa convertion
+//utility functions
 function convertMoney(amount, type){
     amount = Number(amount);
     if (isNaN(amount)){
@@ -56,34 +15,6 @@ function convertMoney(amount, type){
         }else{
             return "Invalid currency type"
         }
-    }
-}
-
-const allExpenses = [];
-// accept and store expense in local storage
-function addExpense(expense){
-    const oldExpenses = getExpenses() || allExpenses;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(oldExpenses));
-    if (Number(expense.amount) && category.includes(expense.category)){
-        const expenseWithId = {id: generateRandomId(), ...expense}
-        oldExpenses.push(expenseWithId);
-        const newExpenses = oldExpenses;
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(newExpenses))
-        return "Expense added successfully";
-    }else{
-        return "Invalid expense input"
-    }
-}
-
-// retrieve expense by id
-function getExpense(id){
-    let expenses = localStorage.getItem(STORAGE_KEY);
-    expenses = JSON.parse(expenses);
-    const foundExpense = (expenses || []).find(expense => expense.id === id)
-    if (Boolean(foundExpense)){
-        return foundExpense ;
-    } else{
-        return"Expense doesn't exist";
     }
 }
 
@@ -136,16 +67,25 @@ function getExpenses(filter){
     }
 }
 
+// save the expenses in the local storage with this key
+const STORAGE_KEY = "expenses"
+
+const category = ["utilities", "transportation","church", "groceries", "savings"];
+
+// dashboard script
+const initHomeScript = ()=>{
+const dashboard = document.getElementById("dashboard");
+
 function getTotalExpenses(){
     const expenses = getExpenses();
-    let sum = expenses.reduce( (acc,expense) => acc + expense.amount, 0);
+    let sum = expenses.reduce( (acc,expense) => Number(acc) + Number(expense.amount), 0);
     sum = convertMoney(sum, "PESEWAS");
     return sum;
 }
 
 function getTotalExpensesByCategory(category){
     const expenses = getExpenses(category);
-    let sum = expenses.reduce( (acc,expense) => acc + expense.amount, 0);
+    let sum = expenses.reduce( (acc,expense) => Number(acc) + Number(expense.amount), 0);
     sum = convertMoney(sum, "PESEWAS");
     return sum;
 }
@@ -156,7 +96,7 @@ function getAverageExpense(){
     if (expenseLength === 0) {
         return "Can't divide by zero";
     }
-    let averageExpense = totalExpenses/expenseLength;
+    let averageExpense = Math.round(totalExpenses/expenseLength);
     return averageExpense;
 }
 
@@ -191,21 +131,159 @@ function  updateExpense(id, updatedFields){ // updatedFields obj containing fiel
     return `Expense updated successfully`;
 }
 
-const expense1 = {
-    amount: 3000, // will be stored in pesewas but displayed in cedis
-    category: "Food"
-};
+    // const category = ["utilities", "transportation","church", "groceries", "savings"];
+    function updateSummary(){
+        const summaryCard = document.createElement("div");
+            summaryCard.innerHTML = `
+            <p class="font-bold text-2xl ml-5">Summary</p>
+            <div class="grid md:grid-cols-3 grid-cols-1 mt-10 place-items-center gap-10 "> 
+                <div class=" w-110 h-40 bg-[#FBF9FA] shadow-sm rounded-4xl flex flex-col p-8 gap-10 font-bold"> TOTAL EXPENSES <span class="text-2xl"> ${getTotalExpenses()} </span></div>
+                <div class="w-110 h-40 bg-[#FBF9FA] shadow-sm rounded-4xl flex flex-col p-8 gap-10 font-bold"> AVERAGE EXPENSES  <span class="text-2xl"> ${getAverageExpense()} </span> </div> 
+            </div>
+                <p class="mt-10 font-bold text-2xl ml-5">Expenses By Category</p>
+            <div class="grid md:grid-cols-3 grid-cols-1 mt-10 gap-10 place-items-center">
+                    <div class="w-110 h-40 bg-[#FBF9FA] shadow-sm rounded-4xl flex flex-col p-8 gap-10 font-bold">  ${category[0].toUpperCase()} <span class="text-2xl"> ${getTotalExpensesByCategory({category:{ eq: category[0]}})} </span></div>
+                    <div class="w-110 h-40 bg-[#FBF9FA] shadow-sm rounded-4xl flex flex-col p-8 gap-10 font-bold"> ${category[1].toUpperCase()} <span class="text-2xl"> ${getTotalExpensesByCategory({category:{ eq: category[1]}})} </span> </div>
+                    <div class="w-110 h-40 bg-[#FBF9FA] shadow-sm rounded-4xl  flex flex-col p-8 gap-10 font-bold"> ${category[2].toUpperCase()} <span class="text-2xl"> ${getTotalExpensesByCategory({category:{ eq: category[2]}})} </span></div>
+                    <div class="w-110 h-40 bg-[#FBF9FA] shadow-sm rounded-4xl flex flex-col p-8 gap-10 font-bold"> ${category[3].toUpperCase()} <span class="text-2xl"> ${getTotalExpensesByCategory({category:{ eq: category[3]}})} </span> </div>
+                    <div class="w-110 h-40 bg-[#FBF9FA] shadow-sm rounded-4xl  flex flex-col p-8 gap-10 font-bold"> ${category[4].toUpperCase()} <span class="text-2xl"> ${getTotalExpensesByCategory({category:{ eq: category[4]}})}</span></div>
+            </div>
+            
+            `;
+            dashboard.appendChild(summaryCard);
+            return "Summary Updated";
+    }
 
-const expense2 = {
-    description: "Something",
-    amount: "5400", 
-    date: new Date(),
-    category: category[2]
+document.addEventListener('DOMContentLoaded', updateSummary);
+window.addEventListener('storage', updateSummary);
+console.log(getExpenses())
 }
 
-// let updatedExpense = updateExpense("A1B2C2D4", expense1);
-// console.log(updatedExpense);
-// console.log(addExpense(expense2));
-console.log(addExpense(expense2));
-console.log(getExpenses());
-// console.log(getExpense("A1B2C2D4"));
+const initExpenseScript = () => {
+
+const description = document.getElementById("descriptionTitle");
+const amount = document.getElementById("amount");
+const categ = document.getElementById("categories");
+const date = document.getElementById("date");
+const form = document.getElementById("expenseForm");
+const tableRow = document.getElementById("t-body");
+
+const expenseFilter = {
+    category : {
+        eq:"",
+        notEq:"",
+    },
+    amount: {
+        eq:0,
+        lt:0,
+        lte:0,
+        gt:0,
+        gte:0
+    }
+}
+
+// random id for each expense created
+function generateRandomId(){
+    const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let id = "";
+    const length = characters.length;
+    for(let i=0; i<8; i++){
+        let key = Math.floor(Math.random() * length);
+        let character = characters.charAt(key);
+        id+=character;
+    }
+    return id;
+};
+
+const allExpenses = [];
+// accept and store expense in local storage
+function addExpense(expense){
+    const oldExpenses = getExpenses() || allExpenses;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(oldExpenses));
+    if (Number(expense.amount) && category.includes(expense.category)){
+        const expenseWithId = {id: generateRandomId(), ...expense}
+        oldExpenses.push(expenseWithId);
+        const newExpenses = oldExpenses;
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(newExpenses))
+        return "Expense added successfully";
+    }else{
+        return `Invalid expense input ${expense.amount}  and ${expense.category}`
+    }
+}
+
+// retrieve expense by id
+function getExpense(id){
+    let expenses = localStorage.getItem(STORAGE_KEY);
+    expenses = JSON.parse(expenses);
+    const foundExpense = (expenses || []).find(expense => expense.id === id)
+    if (Boolean(foundExpense)){
+        return foundExpense ;
+    } else{
+        return"Expense doesn't exist";
+    }
+}
+
+function  updateExpense(id, updatedFields){ // updatedFields obj containing fields for new values, al attrs or not
+    const oldExpense = getExpense(id); // returns the object
+    const expenses = getExpenses();
+    const index = (expenses || []).findIndex(expense => expense.id === id);
+    // clone and merge expenses
+    if (Number(updatedFields.amount) && category.includes(updatedFields.category)){
+        const newExpense = {
+            ...oldExpense,
+            ...updatedFields
+        }
+        expenses[index] = newExpense;
+    }else{
+        console.log("Invalid update fields")
+    }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(expenses));
+    return `Expense updated successfully`;
+}
+
+function updateTable(expense){
+        const tableData = document.createElement("tr");
+        tableData.innerHTML = `
+        <td class="border border-gray-400 md:p-2 p-1">${expense.description}</td>
+        <td class="border border-gray-400 md:p-2 p-1">${convertMoney(expense.amount, "PESEWAS")}</td>
+        <td class="border border-gray-400 md:p-2 p-1">  <span class="w-full h-full bg-amber-300 rounded-3xl"> ${expense.category} </span> </td>
+        <td class="border border-gray-400 md:p-2 p-1">${expense.date}</td>
+        `;
+        tableRow.appendChild(tableData);
+        return "Table updated";
+}
+
+function loadExistingExpenses() {
+    const expenses = getExpenses() || [];
+    expenses.forEach(expense => {
+        updateTable(expense);
+    });
+}
+
+form.addEventListener("submit", function(e){
+    e.preventDefault(); 
+
+    const newExpense = {
+        description: description.value,
+        amount: amount.value,
+        date: date.value,
+        category: categ.value
+    };
+    
+    const result = addExpense(newExpense);
+    const table = updateTable(newExpense);
+    console.log(getExpenses());
+    form.reset();
+})
+
+document.addEventListener('DOMContentLoaded', loadExistingExpenses);
+
+}
+
+const path = window.location.pathname;
+
+if(path === "/expenses.html"){
+    initExpenseScript();
+}else{
+    initHomeScript();
+}
